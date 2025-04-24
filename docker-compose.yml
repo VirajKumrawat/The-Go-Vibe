@@ -1,0 +1,41 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      TZ: Asia/Kolkata
+      NODE_ENV: development
+      PORT: 3000
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      MONGODB_URI: mongodb://root:example@mongo:27017/uber-rapido?authSource=admin
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    environment:
+      TZ: Asia/Kolkata
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: uber-rapido
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh -u root -p example --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
