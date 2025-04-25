@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "echo \"No tests to run.\" && exit 0"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
