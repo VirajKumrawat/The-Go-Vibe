@@ -4,13 +4,19 @@ const { generateOTP } = require('../utils/helpers');
 
 exports.sendOTP = async (mobileNumber) => {
   // Generate a 6-digit OTP
-  const otp = generateOTP(6);
+  // const otp = generateOTP(6);
   
-  // Save OTP to database
-  await OTP.create({ mobileNumber, otp });
+  // // Save OTP to database
+  // await OTP.create({ mobileNumber, otp });
 
   // Send OTP via Twilio
   try {
+
+    const otp = generateOTP(6);
+  
+  // Save OTP to database
+    await OTP.create({ mobileNumber, otp });
+    
     await client.messages.create({
       body: `Your OTP for Uber/Rapido app is: ${otp}`,
       from: twilioPhoneNumber,
